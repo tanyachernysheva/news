@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:news/models/news.dart';
+import 'package:news/screens/news_screen/widgets/image_box.dart';
 
-class NewsScreen extends StatefulWidget {
+class NewsScreen extends StatelessWidget {
   final News? news;
   const NewsScreen({
     super.key,
@@ -9,19 +11,27 @@ class NewsScreen extends StatefulWidget {
   });
 
   @override
-  State<NewsScreen> createState() => _NewsScreenState();
-}
-
-class _NewsScreenState extends State<NewsScreen> {
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(children: <Widget>[
-        ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Image.network(widget.news?.image ?? ''),
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        body: Column(
+          children: <Widget>[
+            ImageBox(
+              news: news,
+            ),
+            SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.all(21.0),
+                child: Text(
+                  news?.body ?? '',
+                ),
+              ),
+            ),
+          ],
         ),
-      ]),
+      ),
     );
   }
 }
