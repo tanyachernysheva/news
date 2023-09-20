@@ -3,8 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news/models/news.dart';
 import 'package:news/repositories/news_repo.dart';
+import 'package:news/screens/news_screen/news_screen.dart';
 import 'package:news/screens/notifications_screen/bloc/news_bloc.dart';
 import 'package:news/screens/notifications_screen/widgets/carousel.dart';
+import 'package:news/screens/notifications_screen/widgets/news_card.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -36,7 +38,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         centerTitle: true,
         actions: <Widget>[
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              _bloc.add(const NewsEvent.markAllRead());
+            },
             child: const Text('Mark all read'),
           ),
         ],
@@ -49,7 +53,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 28.0,
+                      horizontal: 18.0,
                       vertical: 18.0,
                     ),
                     child: Text(
@@ -59,32 +63,43 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   ),
                   Carousel(
                     news: <News>[
-                      ...?state.featuredNews,
+                      ...state.featuredNews,
                     ],
+                    bloc: _bloc,
                   ),
                   const SizedBox(height: 18),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 28.0,
+                      horizontal: 18.0,
                     ),
                     child: Text(
                       'Latest news',
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                   ),
-                  const SizedBox(
-                    height: 18,
-                  ),
                   ListView.separated(
                     physics: const NeverScrollableScrollPhysics(),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 28.0,
+                      horizontal: 18.0,
                       vertical: 18.0,
                     ),
                     shrinkWrap: true,
-                    itemCount: state.latestNews?.length ?? 0,
+                    itemCount: state.latestNews.length,
                     itemBuilder: (context, index) {
-                      return NewsCard(news: state.latestNews?[index]);
+                      final news = state.latestNews[index];
+
+                      return NewsCard(
+                        news: news,
+                        onTap: () {
+                          _bloc.add(NewsEvent.latestIsRead(index));
+
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      NewsScreen(news: news)));
+                        },
+                      );
                     },
                     separatorBuilder: (context, index) {
                       return const SizedBox(height: 18);
@@ -95,51 +110,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             NewsLoadingState() => const Center(
                 child: CircularProgressIndicator.adaptive(),
               ),
-            NewsErrorState() => const SizedBox(),
+            NewsErrorState() => Center(
+                child: Text(state.message ?? ''),
+              ),
           };
         },
-      ),
-    );
-  }
-}
-
-class NewsCard extends StatelessWidget {
-  final News? news;
-
-  const NewsCard({
-    super.key,
-    this.news,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(9),
-        color: Colors.white,
-        boxShadow: const <BoxShadow>[
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 5.0,
-            offset: Offset(5, 5),
-          ),
-          BoxShadow(
-            color: Colors.white,
-            blurRadius: 5.0,
-            offset: Offset(-5, -5),
-          ),
-        ],
-      ),
-      child: ListTile(
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Image.network(news?.image ?? ''),
-        ),
-        title: Text(news?.title ?? ''),
-        subtitle: Text(news?.posted ?? ''),
-        subtitleTextStyle: Theme.of(context).textTheme.bodySmall,
-        onTap: () {},
       ),
     );
   }

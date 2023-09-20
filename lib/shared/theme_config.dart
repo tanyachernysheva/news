@@ -4,11 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 abstract final class ThemeConfig {
   static final themeData = ThemeData(
     fontFamily: GoogleFonts.openSans(fontWeight: FontWeight.w400).fontFamily,
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.transparent,
+    appBarTheme: AppBarTheme(
+      backgroundColor: Colors.grey[100],
       elevation: 0,
       foregroundColor: Colors.black,
     ),
+    scaffoldBackgroundColor: Colors.grey[100],
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: Colors.black,

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:news/models/news.dart';
 import 'package:news/screens/news_screen/news_screen.dart';
+import 'package:news/screens/notifications_screen/bloc/news_bloc.dart';
 
 class Carousel extends StatefulWidget {
   final List<News> news;
+  final NewsBloc bloc;
 
   const Carousel({
     super.key,
     required this.news,
+    required this.bloc,
   });
 
   @override
@@ -27,6 +30,8 @@ class _CarouselState extends State<Carousel> {
 
           return GestureDetector(
             onTap: () {
+              widget.bloc.add(NewsEvent.featuredIsRead(index));
+
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -35,7 +40,7 @@ class _CarouselState extends State<Carousel> {
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(12),
                 image: DecorationImage(
                   image: NetworkImage(
                     newsObj.image ?? '',
@@ -47,7 +52,7 @@ class _CarouselState extends State<Carousel> {
                 children: <Widget>[
                   Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(12),
                       color: const Color.fromARGB(106, 0, 0, 0),
                     ),
                   ),
@@ -61,6 +66,15 @@ class _CarouselState extends State<Carousel> {
                       ),
                     ),
                   ),
+                  newsObj.isRead == true
+                      ? const Positioned(
+                          bottom: 0,
+                          right: 8,
+                          child: Chip(
+                            label: Icon(Icons.check),
+                          ),
+                        )
+                      : const SizedBox(),
                 ],
               ),
             ),
