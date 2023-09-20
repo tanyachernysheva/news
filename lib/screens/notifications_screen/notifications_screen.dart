@@ -94,17 +94,18 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           _bloc.add(NewsEvent.latestIsRead(index));
 
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      NewsScreen(news: news)));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NewsScreen(news: news),
+                            ),
+                          );
                         },
                       );
                     },
                     separatorBuilder: (context, index) {
                       return const SizedBox(height: 18);
                     },
-                  )
+                  ),
                 ],
               ),
             NewsLoadingState() => const Center(

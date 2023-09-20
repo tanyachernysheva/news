@@ -51,7 +51,9 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   }
 
   void _setFeaturedIsRead(
-      _NewsFeaturedIsReadEvent event, Emitter<NewsState> emit) {
+    _NewsFeaturedIsReadEvent event,
+    Emitter<NewsState> emit,
+  ) {
     if (state is! NewsDataState) return;
 
     try {

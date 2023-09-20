@@ -33,9 +33,11 @@ class _CarouselState extends State<Carousel> {
               widget.bloc.add(NewsEvent.featuredIsRead(index));
 
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => NewsScreen(news: newsObj)));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NewsScreen(news: newsObj),
+                ),
+              );
             },
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -66,15 +68,16 @@ class _CarouselState extends State<Carousel> {
                       ),
                     ),
                   ),
-                  newsObj.isRead == true
-                      ? const Positioned(
-                          bottom: 0,
-                          right: 8,
-                          child: Chip(
-                            label: Icon(Icons.check),
-                          ),
-                        )
-                      : const SizedBox(),
+                  if (newsObj.isRead == true)
+                    const Positioned(
+                      bottom: 0,
+                      right: 8,
+                      child: Chip(
+                        label: Icon(Icons.check),
+                      ),
+                    )
+                  else
+                    const SizedBox(),
                 ],
               ),
             ),

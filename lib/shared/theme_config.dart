@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 abstract final class ThemeConfig {
+  ThemeConfig._();
+
   static final themeData = ThemeData(
     fontFamily: GoogleFonts.openSans(fontWeight: FontWeight.w400).fontFamily,
     appBarTheme: AppBarTheme(

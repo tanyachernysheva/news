@@ -40,16 +40,17 @@ class NewsCard extends StatelessWidget {
             onTap: onTap,
           ),
         ),
-        news?.isRead == true
-            ? const Positioned(
-                right: 8,
-                bottom: 0,
-                child: Chip(
-                  backgroundColor: Colors.transparent,
-                  label: Icon(Icons.check),
-                ),
-              )
-            : const SizedBox(),
+        if (news?.isRead == true)
+          const Positioned(
+            right: 8,
+            bottom: 0,
+            child: Chip(
+              backgroundColor: Colors.transparent,
+              label: Icon(Icons.check),
+            ),
+          )
+        else
+          const SizedBox(),
       ],
     );
   }
